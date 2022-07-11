@@ -1,5 +1,8 @@
+import { Button, Table, TableCell, TableRow, TableBody, TableHead, Typography } from "@material-ui/core";
 import React, { Component } from "react";
 import ApiService from "../../ApiService";
+import CreateIcon from "@material-ui/icons/Create"
+import DeleteIcon from "@material-ui/icons/Delete"
 
 class UserList extends Component {
 
@@ -46,13 +49,13 @@ class UserList extends Component {
     }
 
     editUser = (ID) => {
-        window.localStorage.setItem("userID", ID);
+        window.localStorage.setItem("userID", ID); // 브라우저 로컬 저장공간에 임시로 ID값을 저장한다. 이건 EditUser.js 컴포넌트의 loadUser()에서 받는다.
         this.props.history.push('/edit-user');
 
     }
 
     addUser = () => {
-        window.localStorage.setItem("userID"); // 브라우저 로컬 저장공간에 임시로 이걸 저장한 후, 컴포넌트로 이동
+        window.localStorage.setItem("userID");
         this.props.history.push('/add-user'); 
     }
 
@@ -60,42 +63,53 @@ class UserList extends Component {
     render() {
         return(
             <div>
-                <h2>동호회 회원 리스트</h2>
-                <button onClick={this.addUser}>회원추가</button>
+                <Typography variant = "h4" style = {style}>동호회 회원 리스트</Typography>
+                <Button variant = "contained" color = "primary" onClick={this.addUser}>회원추가</Button>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>회원번호</th>
-                            <th>이름</th>
-                            <th>전화번호</th>
-                            <th>별명</th>
-                            <th>나이</th>
-                            <th>회비(어쩔 수 없다. 자본주의 사회잖아.)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>번호</TableCell>
+                            <TableCell>이름</TableCell>
+                            <TableCell>전화번호</TableCell>
+                            <TableCell>별명</TableCell>
+                            <TableCell>나이</TableCell>
+                            <TableCell>회비(어쩔 수 없다. 자본주의 사회잖아.)</TableCell>
+                            <TableCell>정보수정</TableCell>
+                            <TableCell>회원탈퇴</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                         {this.state.users.map(user=>
-                            <tr key = {user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.name}</td>
-                                <td>{user.phone}</td>
-                                <td>{user.nickname}</td>
-                                <td>{user.age}</td>
-                                <td>{user.membership}</td>
-                                <td>
-                                    <button onClick={()=>this.editUser(user.id)}>수정</button>
-                                    <button onClick={()=>this.deleteUser(user.id)}>삭제</button>
-                                </td>
-                            </tr>
+                            <TableRow key = {user.id}>
+                                <TableCell>{user.id}</TableCell>
+                                <TableCell>{user.name}</TableCell>
+                                <TableCell>{user.phone}</TableCell>
+                                <TableCell>{user.nickname}</TableCell>
+                                <TableCell>{user.age}</TableCell>
+                                <TableCell>{user.membership}</TableCell>
+                                <TableCell>
+                                    <button onClick={()=>this.editUser(user.id)}>
+                                        <CreateIcon></CreateIcon>
+                                    </button>
+                                    <button onClick={()=>this.deleteUser(user.id)}>
+                                        <DeleteIcon></DeleteIcon>
+                                    </button>
+                                </TableCell>
+                            </TableRow>
                             )}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
 
 
             </div>
         );
     }
+}
+
+const style = {
+    display: 'flex',
+    justifyContent: 'center'
 }
 
 export default UserList;
